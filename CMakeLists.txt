@@ -1,0 +1,74 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(F1_Live_Companion VERSION 0.1 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(QT_QML_GENERATE_QMLLS_INI ON)
+
+set(BOOST_ROOT "C:/Boost/boost_1_90_0")
+
+find_package(Boost REQUIRED)
+find_package(OpenSSL REQUIRED)
+
+find_package(Qt6 REQUIRED COMPONENTS Quick)
+
+qt_standard_project_setup(REQUIRES 6.8)
+
+if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/importedcontent/CMakeLists.txt")
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/importedcontent)
+endif()
+
+qt_add_executable(appF1_Live_Companion
+    main.cpp
+)
+
+qt_add_qml_module(appF1_Live_Companion
+    URI F1_Live_Companion
+    QML_FILES
+        Main.qml
+        qml/CustomButton.qml
+        SOURCES cpp/API.cpp
+        SOURCES header/API.h
+        SOURCES header/F1_Request.h
+        SOURCES cpp/F1_Request.cpp
+        SOURCES
+        SOURCES header/NetworkAccess.h
+        SOURCES header/headers.h
+        SOURCES
+        SOURCES cpp/settings.cpp
+        SOURCES header/settings.h
+        RESOURCES
+)
+
+qt_add_resources(appF1_Live_Companion "source"
+    PREFIX "/source"
+    BASE "resource/ssl"          # без слэша в начале, путь относительно папки с CMakeLists.txt
+    FILES
+        resource/ssl/cacert.pem
+)
+
+set_target_properties(appF1_Live_Companion PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+target_compile_definitions(appF1_Live_Companion PRIVATE
+    BOOST_JSON_NO_LIB
+    BOOST_ALL_NO_LIB
+)
+
+target_link_libraries(appF1_Live_Companion
+    PRIVATE Qt6::Quick
+)
+target_link_libraries(appF1_Live_Companion
+    PRIVATE Boost::headers OpenSSL::SSL OpenSSL::Crypto
+)
+
+
+install(TARGETS appF1_Live_Companion
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
