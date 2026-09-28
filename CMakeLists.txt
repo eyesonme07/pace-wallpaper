@@ -22,11 +22,19 @@ qt_add_executable(appF1_Live_Companion
     main.cpp
 )
 
+set_source_files_properties(qml/Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 qt_add_qml_module(appF1_Live_Companion
     URI F1_Live_Companion
     QML_FILES
         Main.qml
         qml/CustomButton.qml
+        qml/Wallpaper_page.qml
+        qml/Widgets_page.qml
+        qml/About_page.qml
+        qml/Location_page.qml
+        qml/Update_data_page.qml
+        qml/Theme.qml
         SOURCES cpp/API.cpp
         SOURCES header/API.h
         SOURCES header/F1_Request.h
@@ -38,6 +46,11 @@ qt_add_qml_module(appF1_Live_Companion
         SOURCES cpp/settings.cpp
         SOURCES header/settings.h
         RESOURCES
+        SOURCES cpp/wallpaper.cpp
+        SOURCES header/wallpaper.h
+        SOURCES header/qmlAdapter.h
+        SOURCES cpp/qmlAdapter.cpp
+
 )
 
 qt_add_resources(appF1_Live_Companion "source"

@@ -12,16 +12,16 @@ Button {
 
     contentItem: Text {
         text: customButton.text
-        color: color_text_white
+        color: Theme.color_text_white
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         font.bold: customButton.isHighlighted
     }
 
     background: Rectangle {
-        color: customButton.hovered ? customButton.isHighlighted ? color_red_hover : color_background_hover : (customButton.isHighlighted ? color_red : color_background)
+        color: customButton.hovered ? customButton.isHighlighted ? Theme.color_red_hover : Theme.color_background_hover : (customButton.isHighlighted ? Theme.color_red : Theme.color_background)
         radius: 10
-        border.color: color_border
+        border.color: Theme.color_border
         border.width: 1
 
         Behavior on color {

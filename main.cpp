@@ -1,29 +1,22 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include"header/F1_Request.h"
-#include<thread>
-#include<chrono>
+#include<QQmlContext>
+#include"header/qmlAdapter.h"
+
+
+static QObject* backendProvider(QQmlEngine*, QJSEngine*)
+{
+    return new QMLAdapter();
+}
+
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-
-    DriverParser par;
-
-
-    std::vector<Driver> list = par.getDriversList();
-
-    for(const auto &el:list){
-        qDebug()<<"Id - "<<el.id;
-        qDebug()<<"Driver Name - "<<el.firstName<<" "<<el.lastName;
-        qDebug()<<"Number - "<<el.nuumber;
-        qDebug()<<"DirthDate - "<<el.birthDate;
-        qDebug()<<"tla - "<<el.tla;
-
-        qDebug()<<"---------------------------------------";
-    }
+    qmlRegisterSingletonType<QMLAdapter>("Backend",1,0,"Backend",backendProvider);
 
     QObject::connect(
         &engine,

@@ -12,17 +12,8 @@ ApplicationWindow {
     minimumHeight: 250
     visible: true
 
-    property string color_background: "#141414"
-    property string color_background_hover: "#1E1E1E"
-    property string color_text_white: "#F0F0F0"
-    property string color_border: "#2A2A2A"
-    property string color_red: "#E8002D"
-    property string color_red_hover: "#FF1744"
-    property string color_background_selected: "#3A1620"
-    property string color_text_gray: "#C0C0C0"
-
-    Material.background: color_background
-    Material.accent: color_red
+    Material.background: Theme.color_background
+    Material.accent: Theme.color_red
 
     Rectangle {
         id: leftMenu
@@ -32,7 +23,7 @@ ApplicationWindow {
         anchors.left: parent.left
         height: parent.height
 
-        color: color_background_hover
+        color: Theme.color_background_hover
         ListModel {
             id: menuModel
 
@@ -66,15 +57,16 @@ ApplicationWindow {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: delegateRoot.isSelected ? color_background_selected : "transparent"
+                    color: delegateRoot.isSelected ? Theme.color_background_selected : "transparent"
 
                     Rectangle {
                         width: 3
                         height: parent.height - 6
-                        color: color_red
+                        color: Theme.color_red
                         visible: delegateRoot.isSelected
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
+
                     }
                 }
 
@@ -83,7 +75,7 @@ ApplicationWindow {
                     anchors.leftMargin: 15
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    color: delegateRoot.isSelected ? color_red : color_text_gray
+                    color: delegateRoot.isSelected ? Theme.color_red : Theme.color_text_gray
                 }
 
                 MouseArea {
@@ -94,21 +86,45 @@ ApplicationWindow {
         }
     }
     Rectangle {
-        color: color_border
+        color: Theme.color_border
         height: leftMenu.height
         width: 1
         anchors.left: leftMenu.right
         anchors.top: leftMenu.top
     }
 
+    StackLayout {
+        currentIndex: menuListView.currentIndex
+        anchors.left: leftMenu.right
+        anchors.top: parent.top
+        width: parent.width - leftMenu.width
+        height: parent.height
+
+        Wallpaper_page {
+            id: wallpaper_page
+        }
+        Widgets_page {
+            id: widgets_page
+        }
+        Location_page {
+            id: location_page
+        }
+        Update_data_page {
+            id: update_data_page
+        }
+        About_page {
+            id: about_page
+        }
+    }
+
     footer: Rectangle {
         id: rec_Footer
         height: 50
-        color: color_background_hover
+        color: Theme.color_background_hover
 
         Rectangle {
             height: 1
-            color: color_border
+            color: Theme.color_border
             anchors.top: parent.top
             anchors.left: parent.left
             width: parent.width
