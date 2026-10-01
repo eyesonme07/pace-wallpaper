@@ -1,8 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include"header/F1_Request.h"
 #include<QQmlContext>
 #include"header/qmlAdapter.h"
+#include"header/Backend.h"
 
 
 static QObject* backendProvider(QQmlEngine*, QJSEngine*)
@@ -15,6 +15,19 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    app.setApplicationName("pace-wallpaper");
+    app.setOrganizationName("eyesonme");
+
+    Backend backend;
+
+    Backend::createApplicationDir();
+    Backend::copyWallpaperToAppDir();
+    Backend::updateWallpaper();
+
+
+    backend.setTimerDuration(10);
+    backend.startTimerUpdate();
 
     qmlRegisterSingletonType<QMLAdapter>("Backend",1,0,"Backend",backendProvider);
 

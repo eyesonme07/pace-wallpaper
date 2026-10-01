@@ -3,9 +3,9 @@
 
 #include<QObject>
 #include"wallpaper.h"
+#include"Backend.h"
 
-
-//переходник к QML
+//переходник C++ к QML
 class QMLAdapter:public QObject{
     Q_OBJECT
 
@@ -13,10 +13,12 @@ public:
     Q_INVOKABLE bool setWallpalaer(const QUrl &path){
         return wallpaper.setWallpaper(path);
     }
+    Q_INVOKABLE QUrl getWallpaperPath(){return wallpaper.getWallpaperPath();};
 
 
 private:
     Wallpaper wallpaper;
+    Backend backend;
 
 };
 

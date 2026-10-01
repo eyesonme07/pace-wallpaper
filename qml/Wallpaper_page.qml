@@ -31,6 +31,13 @@ Page {
         height: 270
         color: "Red"
         radius: 20
+
+        Image {
+            id: currentWallpaperImage
+            anchors.fill: parent
+            source: Backend.getWallpaperPath()
+            cache: false
+        }
     }
 
     FileDialog {
@@ -41,7 +48,9 @@ Page {
         nameFilters: ["png(*.png),jpg(*.jpg)"]
 
         onAccepted: {
-            Backend.setWallpalaer(fileDialog.selectedFile);
+            if (Backend.setWallpalaer(fileDialog.selectedFile)) {
+                currentWallpaperImage.source = Backend.getWallpaperPath();
+            }
         }
     }
 

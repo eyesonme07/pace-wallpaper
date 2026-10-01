@@ -1,4 +1,5 @@
 #include"../header/wallpaper.h"
+#include<windows.h>
 
 bool Wallpaper::setWallpaper(const QUrl &path)
 {
@@ -12,7 +13,7 @@ bool Wallpaper::setWallpaper(const std::string &path)
     QFileInfo info(QString::fromStdString(path));
 
     if(!info.exists()){
-        qWarning()<<"File not found";
+        qWarning()<<"File not found - "<< path ;
         return false;
     }
 
@@ -25,3 +26,17 @@ bool Wallpaper::setWallpaper(const std::string &path)
     return ok;
 }
 
+QUrl Wallpaper::getWallpaperPath()
+{
+    wchar_t path[MAX_PATH] = {0};
+
+    SystemParametersInfoW(SPI_GETDESKWALLPAPER, MAX_PATH, path, 0);
+
+    QString filePath = QString::fromWCharArray(path);
+
+    if (filePath.isEmpty())
+        return QUrl();
+
+    qDebug()<<"CURRENT WALLPAPER PATH - "<<filePath;
+    return QUrl::fromLocalFile(filePath);
+}

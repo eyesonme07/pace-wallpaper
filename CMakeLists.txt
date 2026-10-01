@@ -6,6 +6,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT_QML_GENERATE_QMLLS_INI ON)
 
 set(BOOST_ROOT "C:/Boost/boost_1_90_0")
+set(OpenCV_DIR "C:/OpenCV/opencv/build/x64/vc16/lib")
+
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 find_package(Boost REQUIRED)
 find_package(OpenSSL REQUIRED)
@@ -49,7 +53,11 @@ qt_add_qml_module(appF1_Live_Companion
         SOURCES cpp/wallpaper.cpp
         SOURCES header/wallpaper.h
         SOURCES header/qmlAdapter.h
-        SOURCES cpp/qmlAdapter.cpp
+        SOURCES
+        SOURCES header/PrepareImage.h
+        SOURCES cpp/PrepareImage.cpp
+        SOURCES header/Backend.h
+        SOURCES cpp/Backend.cpp
 
 )
 
@@ -72,13 +80,13 @@ target_compile_definitions(appF1_Live_Companion PRIVATE
     BOOST_ALL_NO_LIB
 )
 
+target_link_libraries(appF1_Live_Companion PRIVATE ${OpenCV_LIBS})
 target_link_libraries(appF1_Live_Companion
     PRIVATE Qt6::Quick
 )
 target_link_libraries(appF1_Live_Companion
     PRIVATE Boost::headers OpenSSL::SSL OpenSSL::Crypto
 )
-
 
 install(TARGETS appF1_Live_Companion
     BUNDLE DESTINATION .

@@ -5,15 +5,20 @@
 #include<QUrl>
 #include<QDir>
 #include<QFile>
-#include<windows.h>
+#include<opencv2/opencv.hpp>
+#include<QImage>
 
 
 //класс для кстановки обоев
 class Wallpaper{
 public:
     //установка обоев
-    bool setWallpaper(const QUrl &path);
-    bool setWallpaper(const std::string &path);
+    static bool setWallpaper(const QUrl &path);
+    static bool setWallpaper(const std::string &path);
+
+    QUrl getWallpaperPath();
+
+
 private:
 
 };

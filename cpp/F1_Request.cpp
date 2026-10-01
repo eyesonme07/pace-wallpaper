@@ -6,7 +6,7 @@ std::string DriverParser::request()
 {
     try {
         connect();
-        return doGet("/v1/formula1/drivers?page=1&limit=20");
+        return doGet("/v1/formula1/seasons/a233b41e-b953-4cc8-8d53-47120c68749a");
     } catch (...) {
         qDebug()<<"ERROR";
         disconnect();
@@ -61,7 +61,7 @@ std::vector<Driver> DriverParser::getDriversList()
         return drivers;
     }
 
-    boost::json::array list = object["data"].as_array();
+    boost::json::array list = object["drivers"].as_array();
 
     auto safeString = [](const boost::json::value & jv) -> std::string {
         if (jv.is_null()) return "";
@@ -76,12 +76,24 @@ std::vector<Driver> DriverParser::getDriversList()
             Driver d;
             boost::json::object driver = el.as_object();
 
+
+            //про гонщиква
             d.lastName  = safeString(driver["lastName"]);
             d.firstName = safeString(driver["firstName"]);
             d.birthDate = safeString(driver["birthDate"]);
-            d.tla       = safeString(driver["tla"]);
+            d.tla       = safeString(driver["code"]);
             d.id        = safeString(driver["id"]);
             d.nuumber   = safeString(driver["number"]);
+            d.point     = safeString(driver["points"]);
+            d.position  = safeString(driver["position"]);
+
+            //про команду
+            boost::json::object team = (driver["teams"].as_array()).at(0).as_object();
+
+            d.team.id = safeString(team["id"]);
+            d.team.name = safeString(team["name"]);
+            d.team.color = safeString(team["color"]);
+            d.team.shortName = safeString(team["shortName"]);
 
             drivers.push_back(d);
         }

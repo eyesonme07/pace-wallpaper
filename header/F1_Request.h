@@ -3,15 +3,6 @@
 
 #include"../header/API.h"
 
-struct Driver
-{
-    std::string id;
-    std::string firstName;
-    std::string lastName;
-    std::string birthDate;
-    std::string tla;
-    std::string nuumber;
-};
 
 struct Team{
     std::string id;
@@ -21,6 +12,20 @@ struct Team{
     std::string color;
     std::string city;
 };
+
+struct Driver
+{
+    std::string id;
+    std::string firstName;
+    std::string lastName;
+    std::string birthDate;
+    std::string tla;
+    std::string nuumber;
+    std::string position;
+    std::string point;
+    Team team;
+};
+
 
 struct Season
 {
@@ -45,7 +50,7 @@ public:
 };
 
 class SeasonParser:public F1API{
-public:
+public:    
     std::string request()override;
 };
 

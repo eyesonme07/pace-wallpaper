@@ -2,5 +2,5 @@
 
 void Settings::LoadSettings()
 {
-    API_KEY = "key";
+    API_KEY = "";
 }
