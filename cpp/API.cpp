@@ -6,9 +6,7 @@ F1API::F1API():
     stream(NetworkAccess::getInstance().getIo(),
              NetworkAccess::getInstance().getSSLContext())
 {
-
 }
-
 
 void F1API::connect()
 {
@@ -31,7 +29,7 @@ void F1API::disconnect()
     beast::get_lowest_layer(stream).socket().close(ec);
 }
 
-std::string F1API::doGet(const std::string &target)
+std::optional<std::string> F1API::doGet(const std::string &target)
 {
     try {
         http::request<http::string_body> req{http::verb::get, target, 11};
@@ -50,11 +48,51 @@ std::string F1API::doGet(const std::string &target)
 
     } catch (const std::exception &ex) {
         qDebug()<<"ERROR "<<ex.what();
+        return std::nullopt;
     } catch(...){
         qDebug()<<"ERROR ...";
+        return std::nullopt;
     }
-    return "";
+    return std::nullopt;
+}
 
+//проверка на подключение к сервису API
+bool F1API::isOnline(const std::string &host, const std::string &port, int timeoutMs)
+{
+    try {
+        qDebug()<<"START";
+        boost::asio::io_context io;
+        boost::asio::ip::tcp::resolver resolver(io);
+        boost::asio::ip::tcp::socket socket(io);
+
+        boost::system::error_code error;
+        auto results = resolver.resolve(host,port,error);
+
+        if(error){return false;}
+
+        bool connect;
+
+        boost::asio::async_connect(socket,results,[&](const boost::system::error_code &e,const boost::asio::ip::tcp::endpoint &){
+            connect = !e;
+        });
+
+        boost::asio::steady_timer timer(io);
+        timer.expires_after(std::chrono::milliseconds(timeoutMs));
+        timer.async_wait([&](const boost::system::error_code &error){
+            if(!error){
+                qDebug()<<"overtime";
+                boost::system::error_code ignore;
+                socket.close(ignore);
+            }
+        });
+
+        io.run();
+
+        qDebug()<<"END";
+        return connect;
+    } catch (...) {
+        return false;
+    }
 }
 NetworkAccess::NetworkAccess() : ctx(ssl::context::tlsv12_client)
 {
@@ -67,7 +105,6 @@ NetworkAccess::NetworkAccess() : ctx(ssl::context::tlsv12_client)
 
     QByteArray pem = file.readAll();
     file.close();
-
 
     boost::system::error_code ec;
     ctx.add_certificate_authority(

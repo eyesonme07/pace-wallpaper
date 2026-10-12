@@ -15,6 +15,7 @@ find_package(Boost REQUIRED)
 find_package(OpenSSL REQUIRED)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Concurrent)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -58,6 +59,7 @@ qt_add_qml_module(appF1_Live_Companion
         SOURCES cpp/PrepareImage.cpp
         SOURCES header/Backend.h
         SOURCES cpp/Backend.cpp
+        SOURCES header/Logger.h
 
 )
 
@@ -84,6 +86,7 @@ target_link_libraries(appF1_Live_Companion PRIVATE ${OpenCV_LIBS})
 target_link_libraries(appF1_Live_Companion
     PRIVATE Qt6::Quick
 )
+target_link_libraries(appF1_Live_Companion PRIVATE Qt6::Concurrent)
 target_link_libraries(appF1_Live_Companion
     PRIVATE Boost::headers OpenSSL::SSL OpenSSL::Crypto
 )

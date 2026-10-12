@@ -12,6 +12,10 @@
 #include<QTimer>
 #include<QObject>
 #include<chrono>
+#include <QtConcurrent>
+#include<QMutex>
+#include<QMutexLocker>
+
 using namespace std::chrono_literals;
 
 class Backend:public QObject{
@@ -30,8 +34,10 @@ public:
     void setTimerDuration(const unsigned short &durationMin);
 public slots:
     //тут мы берем текущие обои и добавляем информации
-    static void updateWallpaper();
+    static void updateWallpaperAsync();
 private:
+    static void updateWallpaper();
+    static inline QMutex mutex;
     QTimer timer;
 };
 

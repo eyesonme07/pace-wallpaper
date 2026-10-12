@@ -17,6 +17,10 @@ public:
 
     //геттеры
     std::string &getApiKey(){return API_KEY;}
+    int getLeftPadding(){return leftPadding;}
+    int getRightPadding(){return rightPadding;}
+    int getTopPadding(){return topPadding;}
+    int getBottomPadding(){return bottomPadding;}
     std::string getApplicationDir(){
         return QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation).toStdString();
     }
@@ -30,6 +34,8 @@ private:
 
     Settings(){LoadSettings();}
     std::string API_KEY="none";
+
+    int leftPadding,rightPadding,topPadding,bottomPadding;
 };
 
 //для удобства вместо Setings::getInstance пишм settings()

@@ -11,8 +11,10 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/ssl/context.hpp>
 #include<QFile>
+#include<QTimer>
 #include<vector>
 #include"settings.h"
+#include<optional>
 
 namespace beast = boost::beast;
 namespace http = beast::http;

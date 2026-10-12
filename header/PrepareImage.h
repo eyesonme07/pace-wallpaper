@@ -14,6 +14,9 @@ public:
     QImage matToQImage(const cv::Mat &mat);
 
     void prepareImage(cv::Mat &wallpaper,const QString &path);
+    std::optional<cv::Mat> addDriversToImage(cv::Mat &wallpaper);
+    std::optional<cv::Mat> addNextGrandPrix(cv::Mat &wallpaper);
+    cv::Mat addUpdateTime(cv::Mat &wallpaper);
 private:
     DriverParser pareser;
 };

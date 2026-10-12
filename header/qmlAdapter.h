@@ -14,6 +14,11 @@ public:
         return wallpaper.setWallpaper(path);
     }
     Q_INVOKABLE QUrl getWallpaperPath(){return wallpaper.getWallpaperPath();};
+    Q_INVOKABLE void updateWallpaper(){
+        QtConcurrent::run([&](){
+            backend.updateWallpaperAsync();
+        });
+    };
 
 
 private:

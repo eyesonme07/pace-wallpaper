@@ -2,7 +2,7 @@
 
 Backend::Backend()
 {
-    connect(&timer,&QTimer::timeout,this,&Backend::updateWallpaper);
+    connect(&timer,&QTimer::timeout,this,&Backend::updateWallpaperAsync);
     timer.setInterval(15min);
 }
 
@@ -45,6 +45,7 @@ void Backend::createApplicationDir()
 //берем clear и добавляем в него инфы потом сохраняем под названием new
 void Backend::updateWallpaper()
 {
+
     Wallpaper w;
     PrepareImage p;
 
@@ -61,9 +62,6 @@ void Backend::updateWallpaper()
 
     QString suffix = QFileInfo(clearWallpaperPath).suffix();
     QString newWallpaperPath = imagesDir + "/new." + suffix;
-
-    qDebug() << "clear path" << clearWallpaperPath;
-    qDebug() << "new path" << newWallpaperPath;
 
     cv::Mat currentWallpaper = cv::imread(clearWallpaperPath.toStdString());
     if (currentWallpaper.empty()) {
@@ -89,7 +87,6 @@ void Backend::copyWallpaperToAppDir()
     QString srcDir = QDir::cleanPath(info.absolutePath());
     QString ourDir = QDir::cleanPath(QDir(imagesDir).absolutePath());
     if (srcDir.compare(ourDir, Qt::CaseInsensitive) == 0) {
-        qDebug() << "Обои уже в папке приложения, копирование не нужно";
         return;
     }
 
@@ -115,6 +112,16 @@ void Backend::copyWallpaperToAppDir()
 void Backend::setTimerDuration(const unsigned short &durationMin)
 {
     timer.setInterval(std::chrono::minutes(durationMin));
+}
+
+void Backend::updateWallpaperAsync()
+{
+    QtConcurrent::run([](){
+        if(!mutex.tryLock())
+            return;
+        updateWallpaper();
+        mutex.unlock();
+    });
 }
 
 void Backend::startTimerUpdate()

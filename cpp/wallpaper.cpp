@@ -37,6 +37,5 @@ QUrl Wallpaper::getWallpaperPath()
     if (filePath.isEmpty())
         return QUrl();
 
-    qDebug()<<"CURRENT WALLPAPER PATH - "<<filePath;
     return QUrl::fromLocalFile(filePath);
 }

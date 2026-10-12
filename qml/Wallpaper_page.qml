@@ -68,7 +68,10 @@ Page {
             }
         }
         CustomButton {
-            text: "Текущие обои Windows"
+            text: "Обновить"
+            onClicked: {
+                Backend.updateWallpaper();
+            }
         }
     }
 }
